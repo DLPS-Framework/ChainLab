@@ -1,0 +1,91 @@
+{
+  "number_of_setups": "An integer describing the number of setups/architectures w.r.t. blockchain and client settings. The keys 'vm_count', 'instance_type' and all subkeys of <blockchain>_specifigs in blockchain_formation_setting either need to have this length or length 1. The same holds for the keys of client_settings."
+  "blockchain_formation_settings":
+  {
+    "vm_count": "An integer list containing the number of virtual machines needed for the blockchain network",
+    "instance_type": "A string list containing the instance type of virtual machines needed for the blockchain network. Examples are 't2.nano', ..., 't2.large' (usually for programming and debugging), m5.large, ..., m5.4xlarge (usually for benchmarking). A complete list can be found in https://aws.amazon.com/ec2/instance-types/?nc1=h_ls. Beware the limits of the aws account - some instances, in particular the expensive ones, are heavily limited for a good reason.",
+    "image":
+    {
+      "image_id": null,
+      "os": "ubuntu",
+      "version": 18,
+      "permissions": "default"
+    },
+    "subnet_id": "subnet-13",
+    "security_group_id": ["sg-123"],
+    "proxy": {
+      "proxy_user": "User name for proxy. If proxy does not need user enter null",
+      "http_proxy": "URl for HTTP proxy + port. e.g. example.com:8080",
+      "https_proxy": "URl for HTTPS proxy + port. e.g. example.com:8080",
+      "no_proxy": "list of no proxies, e.g. localhost,127.0.0.1,.example"
+             },
+    "user": "ubuntu",
+    "profile": "Name of the used aws profile for assuming role, null for no role",
+    "key_name": "Key Pair Name in aws (needed for ssh access)",
+    "aws_credentials": "/home/user/.aws/credentials",
+    "aws_config": "/home/user/.aws/config",
+    "aws_region": "eu-central-1",
+    "aws_proxy_settings": {
+        "aws_http_proxy": "AWS HTTP Proxy goes here, 'aws_proxy_settings' is not needed for public VPCs!",
+        "aws_https_proxy": "AWS HTTPS Proxy goes here, 'aws_proxy_settings' is not needed for public VPCs!",
+        "aws_no_proxy": "AWS No Proxy goes here, 'aws_proxy_settings' is not needed for public VPCs!"
+    },
+    "priv_key_path": "/home/user/.aws/ssh.pem",
+    "tag_name": "Name Tage for the launched instances",
+    "exp_dir": "/home/user/PycharmProjects/BlockchainFormation/BlockchainFormation",
+    "public_ip": "true if instances need a public IP (only possible in pulic VPC)",
+    "storage_settings": [
+      {
+        "DeviceName": "/dev/sdb",
+        "VirtualName": "string",
+        "Ebs": {
+          "DeleteOnTermination": true,
+          "VolumeSize": "Size in Gigabytes (integer)",
+          "VolumeType": "gp2",
+          "Encrypted": true,
+          "KmsKeyId": "Enter KmsKeyId here (string), else Encrpyted should be false"
+        }
+      }
+    ],
+    "blockchain_type": "A string which specifies the choice of blockchain - currently, one can choose among 'fabric', 'quorum', and 'sawtooth'",
+    "quorum_settings": {
+      "raftblocktime": "An integer list specifying the blocktimes for raft in quorum",
+      "private_fors": "A string list specifying the private fors for private transactions. One can specify 'all' (each transaction can be decrypted by all other nodes), 'n' for an integer n which is striclty smaller than the number of nodes - in this case, nodes 0 to n or n-1 can encrypt the transaction, omitting the node which sends the transaction, of course, and '+n' for an integer n which is strictly smaller than the number of nodes - in this case, the n nodes following the sending nodes can decrypt, starting at 0 when we arrive at the last node. This guarantees a uniform distribution of additional effort on private transactions. The last option is 'all' - in this case, all other nodes (except for the node itself) may decrypt the private transaction.",
+    }
+  },
+  "client_settings":
+  {
+    "number_of_clients": "The number of clients for the setup. Each client has exactly one associated blockchain node, and during a benchmarking run, every client sends at the same frequency. Client number i always targets blockchain node number i % n (modulo operation), where n is the number of blockchain_nodes.",
+    "client_type": "As for 'vm_count' - usually, m5.large is sufficient",
+    "exp_dir": "The path to the folder in which logs and setup data for the clients is stored",
+    "tag_name": "The tag name of the clients in the AWS console"
+  },
+  "number_of_experiments": "the number of experiments for each of the above settings. Must be equal to the length of the longest array in 'experiment_settings'",
+  "experiment_settings":
+  {
+    "exp_dir": "The path to the folder in which all the benchmarking data, logs, measurement results and evaluation charts are stored",
+    "duration": "The number of seconds for which one benchmarking run (at constant tx/s) lasts. The longer the duration, the more precise should the result of the measurement be when we want to measure maximum SUSTAINABLE throughput",
+    "localization_runs": "The number of experiments in which the throughput is localized, i.e., the base and step rate (see below) are adjusted to have a good compromise between (low) number of steps and (high) resolution in an experiment",
+    "repetition_runs": "The number of experiments with base and step taken from the last localization run. They are meant for repeating measurements under equal conditions and therefore getting statistically valid data",
+    "method": "The smart contract function. Choose between writeData, readData, invokeMatrixMultiplication, invokeDoNothing, readMuchData, writeMuchData (the last 2 are not implemented for Sawtooth yet!)",
+    "arg": "A string /an integer specifying The first argument of the method: important for matrixMultiplication (the number of rows/columns) and readMuchData, writeMuchData (start integer). Right now, writeData uses random key/values and readData will therefore probably not work properly",
+    "arg2": "Specifies the second argument - important only for readMuchData and writeMuchData (end integer)",
+    "mode": "Choose between 'public' and 'private' (only supported for quorum yet)",
+    "shape": "Choose between 'smooth' for uniform distribution of transactions and 'step' for issuing all transactions at the beginning of the respective second",
+    "base": "default: 'None', otherwise a number which tells the first localization run at which tx/s the first run should start (suggestion: 80% of expected throughput, important: must be significantly less than actual throughput)",
+    "step": "default: 'None', otherwise a number which tells the first localization run by how many tx/s it should increase the rate of requests for every iteration (suggestion: 4% of expected throughput, important: must be small (few %) compared to actual throughput)",
+    "delay": "an integer specifying the artificial network delay (on outgoing packages) on blockchain nodes, simulation large distances between servers",
+    "r2_bound": "a number between 0 and 1, for small throughput (< frequency_bound), the r² of the regression must be larger than the r2_bound in order to count as 'blockchain can keep up'",
+    "frequency_bound": "an integer - explanation see r2_bound",
+    "latency_bound": "the number of miliseconds such that a latency larger than this number is regarded as 'blockchain cannot keep up' any more. Probably not needed any more due to r²",
+    "throughput_delta_bound": "the ratio by which the true sending rate may differ from the target sending rate, and by which the response rate (throughput) may differ from the sending rate, such that a higher frequency will be tested in the next run",
+    "success_bound": "the minimum ratio of requests which have to be answered successfully in order to continue with the next run at higher frequency",
+    "retry_limit": "the number of attempts for a certain request frequency in case the blockchain cannot keep up with the requests",
+    "ramp_bound": "the number of ramps (benchmarking runs with increasing frequency) which have to be completed in order to regard it valid",
+    "success_base_rate": "the ratio of the maximum throughput measured in the last series of localization runs which determine the base frequency of the next series of localization runs or the repetition runs in case of success (i.e, at least ramp_rate rampings)",
+    "success_step_rate": "the ratio of the maximum throughput measured in the last series of localization runs which determine the step (ramp up rate) of the next series of localization runs or the repetition runs (i.e., at least ramp_rate rampings)",
+    "failure_base_rate": "the ratio of the base rate of the last series of localization runs which determines the base frequency of the next series of localization runs or the repetition run in case of failure (i.e., less than ramp_rate rampings or an error)",
+    "failure_step_rate": "the ratio of the ramping rate of the last series of localization runs which determines the step (ramp up rate) of the next series of localization runs or the repetition run in case of failure (i.e. less than ramp_rate rampings or an error)",
+    "delta_max_time": "the time in seconds for which - after 'duration' seconds of sending requests - the client waits for responses. Should be substantially larger the expected latency."
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "number_of_setups": 2,
+  "blockchain_formation_settings":
+  {
+    "instance_provision": ["aws"],
+    "vm_count": [12],
+    "instance_type": ["m5.large"],
+    "image":
+    {
+      "image_id": null,
+      "os": "ubuntu",
+      "version": 18,
+      "permissions": "default"
+    },
+    "subnet_id": {
+      "eu-central-1": "subnet-abc",
+      "us-east-1": "subnet-def",
+      "ap-southeast-1": "subnet-ghi",
+      "sa-east-1": "subnet-jkl"
+    },
+    "security_group_id": {
+      "eu-central-1": [
+        "sg-abc"
+      ],
+      "us-east-1": [
+        "sg-def"
+      ],
+      "ap-southeast-1": [
+        "sg-ghi"
+      ],
+      "sa-east-1": [
+        "sg-jkl"
+      ]
+    },
+    "proxy": null,
+    "user": "ubuntu",
+    "profile": "default",
+    "key_name": "pk",
+    "aws_credentials": "/home/user/.aws/credentials",
+    "aws_config": "/home/user/.aws/config",
+    "aws_region": [{"eu-central-1": 12}],
+    "aws_proxy_settings": null,
+    "priv_key_path": "/home/user/.aws/key.pem",
+    "tag_name": "blclab_fabric",
+    "exp_dir": "/home/user/experiments",
+    "public_ip": true,
+    "proxy_user": "None",
+    "storage_settings": [
+      {
+        "DeviceName": "/dev/sdb",
+        "VirtualName": "string",
+        "Ebs": {
+          "DeleteOnTermination": true,
+          "VolumeSize": 16,
+          "VolumeType": "gp2",
+          "Encrypted": false
+        }
+      }
+    ],
+    "blockchain_type": "fabric",
+    "fabric_settings":
+    {
+      "fabric_version": ["2.0.0"],
+      "fabric_ca_version": ["1.4.4"],
+      "thirdparty_version": ["0.4.18"],
+      "channel_count": [1],
+      "database": ["CouchDB"],
+      "external_database": [0],
+      "internal_orderer": [0],
+      "org_count": [4],
+      "peer_count": [2],
+      "orderer_type": ["raft"],
+      "orderer_count": [4],
+      "kafka_count": [2],
+      "zookeeper_count": [3],
+      "tick_interval": [500],
+      "election_tick": [10],
+      "heartbeat_tick": [1],
+      "max_inflight_locks": [5],
+      "snapshot_interval_size": [20],
+      "batch_timeout": [0.5],
+      "max_message_count": [1000],
+      "absolute_max_bytes": [10],
+      "preferred_max_bytes": [4096],
+      "tls_enabled": [1],
+      "endorsement_policy": [2, 4],
+      "log_level": ["WARNING"],
+      "private_fors": [2],
+      "collection_index": ["explicit"],
+      "keyspace_size": [10000],
+      "valuespace_size": [10000],
+      "prometheus": [false]
+    }
+  },
+  "client_settings":
+  {
+    "instance_provision": ["aws"],
+    "number_of_clients": [16],
+    "client_type": ["m5.large"],
+    "aws_region": [{"eu-central-1": 16}],
+    "exp_dir": ["/home/user/experiments"],
+    "tag_name": ["blclab_fabric_client"]
+  },
+  "number_of_experiments": 2,
+  "experiment_settings":
+  {
+    "exp_dir": ["/home/user/experiments"],
+    "duration": [20],
+    "localization_runs": [2],
+    "repetition_runs": [0],
+    "method": ["writeData"],
+    "arg": ["key"],
+    "arg2": ["value"],
+    "mode": ["public"],
+    "shape": ["smooth"],
+    "base": [0],
+    "step": [100, 100],
+    "delay": [0],
+    "r2_bound": [0.90],
+    "frequency_bound": [100],
+    "latency_bound": [10000],
+    "throughput_delta_bound_send": [0.1],
+    "throughput_delta_bound_receive": [0.1],
+    "success_bound": [0.8],
+    "retry_limit": [2],
+    "ramp_bound": [2],
+    "success_base_rate": [0.8],
+    "success_step_rate": [0.04],
+    "failure_base_rate": [0.8],
+    "failure_step_rate": [0.04],
+    "delta_max_time": [10]
+  }
+}
