@@ -18,7 +18,7 @@ This repository uses BlockchainFormation to set up the different blockchain netw
 
 ### Run Benchmarking
 To run ChainLab you need to provide a config with all needed configuration parameters for the blockchain, the clients and the experiments.
- Example configs can be found in ```/src/example_configs/public_vpc``` and ```/src/example_configs/private_vpc```. In order to make them run you need to fill in your aws configurations (subnet, security group, ssh keyname, ...)
+ Example configs can be found in ```/src/example_configs/```. In order to make them run you need to fill in your aws configurations (subnet, security group, ssh keyname, ...)
 
 A example usage for Geth is:
 
