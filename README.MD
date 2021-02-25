@@ -20,7 +20,7 @@ This repository uses BlockchainFormation to set up the different blockchain netw
 To run ChainLab you need to provide a config with all needed configuration parameters for the blockchain, the clients and the experiments.
  Example configs can be found in ```/src/example_configs/```. In order to make them run you need to fill in your aws configurations (subnet, security group, ssh keyname, ...)
 
-A example usage for Geth is:
+A example usage for Fabric is:
 
 ```python src/run.py --config /src/example_configs/fabric_config.json```
 
@@ -83,8 +83,11 @@ python setup.py sdist bdist_wheel
 pip install dist/BlockchainFormation-0.0.1.tar.gz 
 ```
 
- 5. Other package which one has to install:
-  See [requirements.txt](requirements.txt)
+5. Other package which one has to install:
+See [requirements.txt](requirements.txt)
+
+6. Repeat the same steps for the package DAppFormation
+
   
 ## License
 
